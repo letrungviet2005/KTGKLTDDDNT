@@ -1,0 +1,14 @@
+[
+  {
+    "email": "an@example.com",
+    "matkhau": "DEMO_NOT_FOR_LOGIN",
+    "hoten": "Nguyễn Văn An",
+    "hinhanh": ""
+  },
+  {
+    "email": "binh@example.com",
+    "matkhau": "DEMO_NOT_FOR_LOGIN",
+    "hoten": "Trần Thị Bình",
+    "hinhanh": ""
+  }
+]

@@ -1,0 +1,28 @@
+// REVIEW ONLY. Replace ADMIN_UID_HERE and compare with current production rules.
+// No deployment is performed by this project.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && request.auth.uid == 'ADMIN_UID_HERE';
+    }
+    function validUser() {
+      let d = request.resource.data;
+      return d.keys().hasAll(['email', 'matkhau', 'hoten', 'hinhanh'])
+        && d.keys().hasOnly(['email', 'matkhau', 'hoten', 'hinhanh'])
+        && d.email is string && d.matkhau is string
+        && d.hoten is string && d.hinhanh is string
+        && d.email.size() > 3 && d.email.size() <= 254
+        && d.email.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$')
+        && d.hoten.size() > 0 && d.hoten.size() <= 100
+        && d.hoten.matches('.*[^\\s].*')
+        && d.matkhau == 'DEMO_NOT_FOR_LOGIN'
+        && d.hinhanh.size() <= 102400
+        && (d.hinhanh == '' || d.hinhanh.matches('^data:image/jpeg;base64,[A-Za-z0-9+/]+={0,2}$'));
+    }
+    match /users/{userId} {
+      allow read, delete: if isAdmin();
+      allow create, update: if isAdmin() && validUser();
+    }
+  }
+}
